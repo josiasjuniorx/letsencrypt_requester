@@ -1,0 +1,21 @@
+FROM debian:9
+MAINTAINER Junior Lima <josiasjuniorx@gmail.com>
+
+RUN apt-get update
+RUN apt-get install -yf apt-utils certbot nginx dnsutils python-django uwsgi uwsgi-plugin-python python-celery
+ENV LANG C.UTF-8
+ENV PYTHONPATH /var/www/html/letsencrypt
+
+COPY certificados /var/www/html/certificados
+COPY letsencrypt /var/www/html/letsencrypt
+COPY static /var/www/html/static
+COPY templates /var/www/html/templates
+COPY uwsgi_params uwsgi.ini /var/www/html/
+COPY default.conf /etc/nginx/conf.d/default.conf
+COPY init /init
+RUN rm /etc/nginx/sites-enabled/default
+RUN mkdir /var/www/html/certs
+RUN chown -R www-data:www-data /var/www/html/certs
+
+EXPOSE 80
+CMD ["/bin/bash", "-c", "source /init"]

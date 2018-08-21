@@ -1,0 +1,147 @@
+<html>
+<head>
+  <title>LetsEncrypt Requester</title>
+  {%load static%}
+  <script src="{% static "letsencrypt/index.js" %}"></script>
+  <link rel=stylesheet type=text/css href={%static 'letsencrypt/default.css'%}>
+</head>
+<body>
+
+<div id=logo>
+  Lets Encrypt Requester
+</div>
+
+<div id=quadro>
+  <form method=post>{%csrf_token%}
+
+      Dominio<input type=text name=dominio maxlength="254" placeholder='Root Domain (ex.: teste.com.br)' required value='{{dominio}}' id=dominio>
+      <button id=botaosearch formaction='{%url "consulta"%}' onclick="getElementById('email').removeAttribute('required')">&#128269;</button>
+
+      Email<input type=email name=email maxlength="254" required id=email>
+      <button id=botao formaction='{%url "certificado"%}' onclick="getElementById('email').setAttribute('required', 'True')">Gerar</button>
+
+    <div id=quadro_opcoes>
+      <label><div id=cb_opcoes><input type=checkbox name=staging disabled>staging (cert-test)</div></label>
+      <label><div id=cb_opcoes><input type=checkbox name=alt_names value='*.'>add wildcard [ *. ]</div></label>
+      <label><div id=cb_opcoes><input type=checkbox name=alt_names value='www.'>add alt-name [www.]</div></label>
+      <label><div id=cb_opcoes><input type=checkbox name=alt_names value='m.'>add alt-name [m.]</div></label>
+      <!--<div id=cb_opcoes><label><input type=checkbox name=autorenew>auto-renew</label></div>-->
+    </div>
+  </form>
+</div>
+
+{% if mensagem and mensagem is not None %}
+  <div id=mensagem>
+    <div id=mensagem_texto>
+      {{mensagem}}
+    </div>
+      {% if cert_state == 'new_cert' %}
+        <div id=mensagem_botao>
+          <form method=post>{%csrf_token%}
+            <input type=hidden name=dominio value={{dominio_post}}>
+            <input type=hidden name=email value={{email_post}}>
+            <button id=botao>ver hash</button>
+          </form>
+        </div>
+      {%endif%}
+      {% if cert_state == 'erro_ask_delete' %}
+        <div id=mensagem_botao>
+          <form method=post>{%csrf_token%}
+            <input type=hidden name=dominio value={{dominio_post}}>
+            <input type=hidden name=email value={{email_post}}>
+            <input type=hidden name=confirm_delete value=Sim>
+            <button id=botaodelete>Sim</button>
+          </form>
+        </div>
+      {%endif%}
+      {% if cert_state == 'hash_validation' %}
+        <div id=mensagem_botao>
+          <form method=post>{%csrf_token%}
+            <input type=hidden name=dominio value={{dominio_post}}>
+            <input type=hidden name=email value={{email_post}}>
+            <button id=botao>Atualizar</button>
+          </form>
+        </div>
+      {%endif%}
+  </div>
+{%endif%}
+
+{% if status %}
+  <div id=status>
+    {% for key,value in status.items %}
+      {%if not key == 'fullchain' and not key == 'privkey'%}
+        <span id=key>{{key}}: </span>
+        <span id=value>
+          {%if key == 'alt_names' or key == 'criação da entrada no dns' or key == 'nameservers' or key == 'entrada TXT atual'%}
+            {%for x in value%}
+              {{x}}
+            {%endfor%}
+          {%else%}
+            {{value}}
+          {%endif%}
+        </span><br>
+      {%endif%}
+    {%endfor%}
+  </div>
+
+  {%if status.privkey%}
+    <div id=status>
+      <div id=botaovv>
+        <button id=botaoview onclick="copyContent('privkey')">&#128203;</button>
+        <button id=botaoview onclick="toggleVisible('privkey')">&#128065;</button>
+      </div>
+      <span id=key>privkey (Chave Privada)</span><br>
+      <span id=privkey>{{status.privkey}}</span>
+    </div>
+  {%endif%}
+
+  {%if status.fullchain%}
+    <div id=status>
+      <div id=botaovv>
+        <button id=botaoview onclick="copyContent('fullchain')">&#128203;</button>
+        <button id=botaoview onclick="toggleVisible('fullchain')">&#128065;</button>
+      </div>
+      <span id=key>fullchain (Certificado + CA Intermediária)</span><br>
+      <span id=fullchain>{{status.fullchain}}</span>
+    </div>
+  {%endif%}
+
+{%endif%}
+
+{%if help == True%}
+<div id=help><center>Dicas sobre como utilizar</center>
+Certificado sem nomes alternativos: (ex.: testeacme.tk):
+  - Preencher apenas o Root Domain e Email.
+
+Certificados com nomes alternativos: (ex.: *.testeacme.tk | www.testeacme.tk):
+  - Preencha o Root Domain (ex.: <i>testeacme.tk</i>) e clique nas checkbox para add alt-name
+
+Se precisar de um nome alternativo que não exista nas checkbox:
+  - Utilize o alt-name [*.] ou solicite um certificado para cada nome alternativo que precisar
+
+Observações:
+  - Certificados <i>*.testeacme.tk</i> não servem para <i>testeacme.tk</i> ou <i>www.exemplo.testeacme.tk</i>
+
+Erros:
+  - Colocar * (asterisco) em Root Domain
+  - Preencher (ex.: www.testeacme.tk) em Root Domain e ao mesmo tempo marcar a checkbox de alt-name
+  - Colocar mais de um nome de domínio em Root Domain
+  - Preencher um email inválido
+
+Validação:
+A validação é feita por entradas TXT no DNS, se o domínio estiver no PowerDNS, o app tentará adicionar e
+excluir a entrada TXT de validação automaticamente. Caso esteja em um DNS externo ou infoblox, é necessário
+inserir a entrada manualmente no servidor DNS:
+  - <i>challenge url</i> é o nome da entrada a ser inserida na zona dns
+  - <i>hash de validação</i> é o texto a ser inserido como entrada TXT
+  - Cada alt-name gera uma nova validação, fique atento no dominio que está sendo validado no momento
+</div>
+{%endif%}
+
+
+
+
+<br>
+<script src='http://toolbox.intranet.uol.com.br/menu.js'></script>
+</body>
+</html>

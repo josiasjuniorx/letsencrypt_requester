@@ -1,0 +1,190 @@
+:root{
+  --color1: rgb(29,185,84);    /*verde*/
+  --color2: rgb(33,33,33);     /*grafite*/
+  --color3: rgb(18,18,18);     /*preto*/
+  --color4: rgb(83,83,83);     /*cinza*/
+  --color5: rgb(179,179,179);  /*cinza-claro*/
+  --color6: rgb(1, 89, 128);   /*azul*/
+}
+
+*{
+  background-color: var(--color2);
+  color: var(--color5);
+  text-shadow: 1px 1px var(--color3);
+}
+
+#botao, #botaosearch, #botaodelete, #botaoview, #botaoinfo{
+  border: none;
+  border-radius: 5px;
+  background-color: var(--color1);
+  width: 90px;
+  height: 30px;
+  color: white;
+  text-shadow: none;
+  cursor: pointer;
+}
+
+#botaosearch{
+  display: inline-flex;
+  background-color: var(--color2);
+  width: 28px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border: var(--color1) solid 1px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+#botaoview{
+  background: None;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color1);
+  font-size: 18px;
+  margin-left: 5px;
+}
+
+#botaodelete{
+  background: red;
+}
+
+#dominio{
+  display: inline-flex;
+  margin-right: -5px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-right: None;
+}
+
+input[type=checkbox]{
+  position: relative;
+  bottom: 3px;
+}
+
+#cb_opcoes{
+  display: inline-flex;
+  border: solid 1px var(--color1);
+  padding: 5px 2px 0px 0px;
+  font-size: 13px;
+  border-radius: 5px;
+  width: 150px;
+  margin-top: 5px;
+}
+
+#quadro_opcoes{
+  display: block;
+  margin: auto;
+  width: 640px;
+}
+
+
+input[type=text], input[type=email]{
+  height: 30px;
+  width: 200px;
+  border: solid 1px var(--color1);
+  border-radius: 5px;
+  margin: 0px 10px 5px 5px;
+  padding: 0px 5px 0px 5px;
+}
+
+#quadro{
+  display: block;
+  margin: auto;
+  border: solid 1px var(--color1);
+  border-radius: 5px;
+  padding: 10 0 5 10;
+  font-family: arial;
+  width: 680px;
+}
+
+#status, #mensagem, #status_table{
+  margin: auto;
+  margin-top: 10px;
+  display: block;
+  border: solid 1px var(--color1);
+  padding: 10px;
+  font-size: 13px;
+  border-radius: 5px;
+  width: 650px;
+  line-height: 20px;
+}
+
+#mensagem_texto, #mensagem_botao{
+  display: inline-flex;
+  color: yellow;
+}
+
+#mensagem_botao{
+  height: 30px;
+  float: right;
+  align-items: center;
+}
+
+#key{ color: var(--color1); }
+
+#privkey, #fullchain{
+  font-family: monospace;
+  white-space: pre-line;
+  display: none;
+}
+
+#botaovv{
+  display: inline-flex;
+  float: right;
+  margin-top: -6px;
+  padding-left: 10px;
+}
+
+#botaoinfo {
+  display: inline-flex;
+  float: right;
+  height: 16px;
+  width: 16px;
+  margin-top: 2px;
+  background-color: var(--color6);
+}
+
+#status_table{ border: none; width: 900px;}
+  #status_cell, #status_caption1, #status_caption2, #status_caption3 {
+    display: table-cell;
+    border: 1px var(--color1) solid;
+    padding: 0 5px 0 5px;
+    text-align: center;
+  }
+    #status_row { display: table-row; }
+    #status_caption1, #status_caption2, #status_caption3 { background-color: var(--color1); color: white;}
+    #status_caption1 { width: 310px; }
+    #status_caption2 {
+      width: 500px;
+      border-left: var(--color2) 1px solid;
+      border-right: var(--color2) 1px solid;
+    }
+    #status_caption3 { width: 90px; }
+
+#logo {
+  float: left;
+  writing-mode: vertical-rl;
+  margin-top: 219px;
+  background-color: var(--color2);
+  color: var(--color1);
+  border: 1px solid var(--color1);
+  padding: 10px 2px 10px 2px;
+  border-left: none;
+  margin-left: -8px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+#help {
+  border: 1px dashed;
+  border-radius: 5px;
+  white-space: pre-wrap;
+  width: 700px;
+  margin: auto;
+  font-size: 12px;
+  line-height: 20px;
+  padding: 10px;
+  margin-top: 20px;
+}

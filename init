@@ -1,0 +1,2 @@
+service nginx start
+/usr/bin/uwsgi --ini /var/www/html/uwsgi.ini --buffer-size=32768

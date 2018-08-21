@@ -1,0 +1,15 @@
+FROM python:2.7
+MAINTAINER Junior Lima <josiasjuniorx@gmail.com>
+
+RUN apt-get update
+RUN apt-get install -yf apt-utils dnsutils
+RUN pip install celery==3.1.23 certbot==0.26 dnspython==1.15.0 ipython
+ENV LANG C.UTF-8
+ENV C_FORCE_ROOT yes
+ENV PYTHONPATH '/usr/local/lib/python2.7/site-packages/celery:/var/www/html/letsencrypt:/usr/local/lib/python2.7/site-packages'
+
+COPY letsencrypt /var/www/html/letsencrypt
+RUN mkdir /var/www/html/certs
+RUN mkdir /var/www/html/certs/status
+
+CMD ["/usr/local/bin/celery", "worker", "-A", "celerytasks", "--workdir=/var/www/html", "-l", "info", "--beat"]

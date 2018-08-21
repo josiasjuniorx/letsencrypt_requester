@@ -1,0 +1,41 @@
+<html>
+<head>
+  <title>LetsEncrypt Cert Status</title>
+  {%load static%}
+  <script src="{% static "letsencrypt/index.js" %}"></script>
+  <link rel=stylesheet type=text/css href={%static 'letsencrypt/default.css'%}>
+</head>
+<body>
+
+<div id=logo>
+  Lets Encrypt Cert Status
+</div>
+
+{%if status%}
+  <div id=status_table>
+    <div id=status_caption1>Nome do Certificado</div>
+    <div id=status_caption2>Domínios</div>
+    <div id=status_caption3>Validade</div>
+    {%for item in status%}
+      <div id=status_row>
+        <div id=status_cell>
+          {{item.name}}
+        </div>
+        <div id=status_cell>
+          {{item.domains}}
+        </div>
+        <div id=status_cell>
+          {{item.days}} dias
+          <button id=botaoinfo onclick="alert('{{item.expiry}}');">&#8505;</button>
+        </div>
+      </div>
+    {%endfor%}
+  </div>
+{%else%}
+  <div id=status>Não foram encontrados certificados.</div>
+{%endif%}
+
+<br>
+<script src='http://toolbox.intranet.uol.com.br/menu.js'></script>
+</body>
+</html>
